@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Space Exploration</title>
+    <style>
+      html, body {
+        margin: 0;
+        overflow: hidden;
+        padding: 0;
+        font-family: 'Arial', sans-serif;
+        background-color: black;
+        color: white;
+        overflow-x: hidden;
+      }
+      .container {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      .title {
+        font-size: 3rem;
+        animation: fadeIn 2s ease-in-out;
+      }
+      .subtitle {
+        font-size: 1.5rem;
+        animation: slideIn 2s ease-in-out;
+      }
+      .planet {
+        width: 200px;
+        height: 200px;
+        background-image: url('earth1.png');
+        background-size: cover;
+        border-radius: 50%;
+        position: absolute;
+        animation: orbit 10s linear infinite;
+      }
+      .star, .bg-star {
+        position: absolute;
+        border-radius: 50%;
+        background-color: white;
+      }
+      .star {
+        width: 5px;
+        height: 5px;
+        animation: twinkle 3s infinite;
+      }
+      .bg-star {
+        width: 2px;
+        height: 2px;
+        animation: backgroundTwinkle 5s infinite;
+      }
+      .transition-section {
+        padding: 50px;
+        text-align: center;
+        opacity: 0;
+        transform: translateY(50px);
+        transition: opacity 1s ease-out, transform 1s ease-out;
+        position: relative;
+      }
+      .transition-section.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .parallax {
+        background: url('space_bg.jpg') no-repeat center center fixed;
+        background-size: cover;
+        height: 100vh;
+        width: 100%;
+      }
+      .rocket {
+        width: 100px;
+        position: absolute;
+        animation: rocketMove 20s linear infinite;
+      }
+      .asteroid-belt {
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        border-radius: 50%;
+        animation: rotateBelt 40s linear infinite;
+      }
+      .asteroid {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: gray;
+        border-radius: 50%;
+      }
+      .rocket-img {
+        height: 70px;
+        width: 90px;
+      }
+      .astronaut {
+        transition-duration: 50ms;
+        height: 70px;
+        position: fixed;
+        left: 10px;
+        top: 30px;
+      }
+      .astronaut1 {
+        transition-duration: 50ms;
+        height: 70px;
+        top:390px;
+        position: fixed;
+        left: 40px;
+        animation: astro 10s cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
+      }
+      .astronaut2 {
+        transition-duration: 50ms;
+        height: 70px;
+        position: fixed;
+        top:390px;
+        left: 150px;
+        animation: astro 10s cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
+      }
+      .hello {
+        background: rgb(67, 67, 67);
+        position: fixed;
+        left: 120px;
+        color: white;
+        height: 50px;
+        width: 100px;
+        border-radius: 10px;
+        display: flex;
+        box-shadow: 0 0 10px rgb(81, 81, 81);
+        align-items: center;
+        justify-content: center;
+        padding: 5px;
+      }
+      .ok {
+        background: rgb(67, 67, 67);
+        box-shadow: 0 0 2px rgb(66, 66, 66);
+        padding: 5px;
+        color: white;
+        height: 30px;
+        width: 50px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px;
+      }
+      .hello:hover {
+        background: rgb(52, 52, 52);
+        transition-duration: 100ms;
+        height: 52px;
+        width: 103px;
+        color: rgb(217, 217, 217);
+      }
+      @keyframes astro {
+        0% { transform: translateY(0); }
+        30% { transform: translateY(-100px); }
+        60% { transform: translateY(-100px); }
+        100% { transform: translateX(-200px) translateY(-100px); }
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      @keyframes slideIn {
+        from { transform: translateX(-100vw); }
+        to { transform: translateX(0); }
+      }
+      @keyframes orbit {
+        0% { transform: rotate(0deg) translateX(300px) rotate(0deg); }
+        100% { transform: rotate(360deg) translateX(300px) rotate(-360deg); }
+      }
+      @keyframes twinkle {
+        0%, 100% { opacity: 0.8; }
+        50% { opacity: 1; }
+      }
+      @keyframes backgroundTwinkle {
+        0%, 100% { opacity: 0.5; }
+        50% { opacity: 1; }
+      }
+      @keyframes rocketMove {
+        0% { left: -10%; top: 80%; transform: rotate(0deg); }
+        50% { left: 50%; top: 10%; transform: rotate(110deg); }
+        100% { left: 110%; top: 80%; transform: rotate(270deg); }
+      }
+      @keyframes rotateBelt {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      .star:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
+      .star:nth-child(2) { top: 40%; left: 80%; animation-delay: 1s; }
+      .star:nth-child(3) { top: 70%; left: 30%; animation-delay: 2s; }
+      .star:nth-child(4) { top: 80%; left: 70%; animation-delay: 3s; }
+      .star:nth-child(5) { top: 20%; left: 60%; animation-delay: 4s; }
+      .bg-star:nth-child(1) { top: 5%; left: 15%; animation-delay: 0s; }
+      .bg-star:nth-child(2) { top: 35%; left: 75%; animation-delay: 1s; }
+      .bg-star:nth-child(3) { top: 60%; left: 25%; animation-delay: 2s; }
+      .bg-star:nth-child(4) { top: 85%; left: 65%; animation-delay: 3s; }
+      .bg-star:nth-child(5) { top: 15%; left: 55%; animation-delay: 4s; }
+      .asteroid:nth-child(1) { top: 50%; left: 5%; }
+      .asteroid:nth-child(2) { top: 10%; left: 15%; }
+      .asteroid:nth-child(3) { top: 25%; left: 30%; }
+      .asteroid:nth-child(4) { top: 75%; left: 40%; }
+      .asteroid:nth-child(5) { top: 30%; left: 70%; }
+      .asteroid:nth-child(6) { top: 80%; left: 85%; }
+      .asteroid:nth-child(7) { top: 20%; left: 95%; }
+      .asteroid:nth-child(8) { top: 90%; left: 60%; }
+      .asteroid:nth-child(9) { top: 60%; left: 80%; }
+      .asteroid:nth-child(10) { top: 5%; left: 50%; }
+      .home {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        width: 100px;
+        height: 100px;
+        background-color: green;
+        border: 2px solid white;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+        <div class="astronaut1"><img class="astronaut1" src="astronaut.png" alt=""></div>
+        <div class="astronaut2"><img class="astronaut2" src="astronaut.png" alt=""></div>
+      <div class="astronaut">
+        <img class="astronaut" src="astronaut.png" alt="Astronaut" id="astronaut">
+        <div><button onclick="showInstructions()" ondblclick="removeinstruction()" class="hello">Click for instructions</button></div>
+      </div>
+      <div class="title">Welcome to Space Exploration</div>
+      <div class="subtitle">Discover the wonders of the universe</div>
+      <div class="planet"></div>
+      <div class="rocket">
+        <img class="rocket-img" src="rocket.png" alt="Rocket">
+      </div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="bg-star"></div>
+      <div class="bg-star"></div>
+      <div class="bg-star"></div>
+      <div class="bg-star"></div>
+      <div class="bg-star"></div>
+      <div class="asteroid-belt">
+        <div class="asteroid"></div>
+        <div class="asteroid"></div>
+        <div class="asteroid"></div>
+        <div class="asteroid"></div>
+        <div class="asteroid"></div>
+        <div class="asteroid"></div>
+        <div class="asteroid"></div>
+        <div class="asteroid"></div>
+        <div class="asteroid"></div>
+        <div class="asteroid"></div>
+      </div>
+    </div>
+
+    <div class="parallax"></div>
+
+    <div class="home" id="home"></div>
+
+    <script>
+      function showInstructions() {
+        var instruction = document.querySelector('.hello');
+        instruction.innerHTML = 'Instruction part 1 <button class="ok" onclick="removeinstruction()">ok</button>';
+        instruction.style.height = '80px';
+        instruction.style.width = '150px';
+      }
+      
+      function removeinstruction() {
+        var instruction = document.querySelector('.hello');
+        instruction.style.display = 'none';
+      }
+
+      document.addEventListener('keydown', function(event) {
+        const astronaut = document.getElementById('astronaut');
+        let left = parseInt(window.getComputedStyle(astronaut).left);
+        let top = parseInt(window.getComputedStyle(astronaut).top);
+
+        switch(event.key) {
+          case 'ArrowUp':
+            astronaut.style.top = `${top - 10}px`;
+            break;
+          case 'ArrowDown':
+            astronaut.style.top = `${top + 10}px`;
+            break;
+          case 'ArrowLeft':
+            astronaut.style.left = `${left - 10}px`;
+            break;
+          case 'ArrowRight':
+            astronaut.style.left = `${left + 10}px`;
+            break;
+        }
+
+        checkCollision();
+      });
+
+      document.addEventListener('mousemove', function(event) {
+        const videoCursor = document.getElementById('video-cursor');
+        videoCursor.style.left = `${event.pageX}px`;
+        videoCursor.style.top = `${event.pageY}px`;
+      });
+
+      let rotationAngle = 0;
+
+      document.addEventListener('wheel', function(event) {
+        const astronaut = document.getElementById('astronaut');
+        rotationAngle += event.deltaY > 0 ? 15 : -15;  // Increase or decrease rotation angle
+        astronaut.style.transform = `rotate(${rotationAngle}deg)`;
+      });
+
+      function checkCollision() {
+        const astronaut = document.getElementById('astronaut');
+        const home = document.getElementById('home');
+        const astronautRect = astronaut.getBoundingClientRect();
+        const homeRect = home.getBoundingClientRect();
+
+        if (
+          astronautRect.right > homeRect.left &&
+          astronautRect.left < homeRect.right &&
+          astronautRect.bottom > homeRect.top &&
+          astronautRect.top < homeRect.bottom
+        ) {
+          home.style.backgroundColor = 'red';
+        }
+      }
+    </script>
+  </body>
+</html>
